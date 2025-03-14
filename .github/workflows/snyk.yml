@@ -26,7 +26,7 @@ jobs:
       run: |        
         mkdir $SNYK_RESULT_PATH      #test
     
-    # running snyk code test command to identify vulnerabilties in code
+    # running snyk code test command to identify vulnerabilties in code test
     - name: Snyk test
       run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
       env:
