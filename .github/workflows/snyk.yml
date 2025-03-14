@@ -19,17 +19,10 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/maven@master
-        continue-on-error: true # To make sure that SARIF upload gets called
-    # # creating a directory to store snyk SAST results    
-      - name: create a directory to store snyk sast results
-        run: |
-          mkdir $SNYK_RESULT_PATH      
-    
-    # # running snyk code test command to identify vulnerabilties in code test
-      - name: Snyk test
-        run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
 
     # steps:
     # - uses: actions/checkout@master
