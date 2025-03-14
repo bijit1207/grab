@@ -1,0 +1,58 @@
+name: DevSecOps Workflow
+on:
+ workflow_call:
+  secrets:
+    SNYK_TOKEN:
+        required: true         
+ push:
+   branches:
+     - main
+     
+env:
+  SNYK_RESULT_PATH: snyk-results
+
+jobs:
+  snyk-sast:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - uses: snyk/actions/setup@master
+    - uses: actions/setup-go@v1
+      with:
+        go-version: "1.13"
+    
+    # creating a directory to store snyk SAST results    
+    - name: create a directory to store snyk sast results
+      run: |        
+        mkdir $SNYK_RESULT_PATH      #test
+    
+    # running snyk code test command to identify vulnerabilties in code
+    - name: Snyk test
+      run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+     # storing snyk sast result as an artifacts      
+    - name: snyk-sast-results  
+      uses: actions/upload-artifact@v2
+      with:
+        name: snyk-sast-results
+        path: ${{ env.SNYK_RESULT_PATH }}
+        retention-days: 30       
+        
+  zap_scan_dast:
+    runs-on: ubuntu-latest
+    name: dast
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        ref: main
+    - name: ZAP Scan
+      uses: zaproxy/action-full-scan@v0.9.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+        target: 'https://owasp-juice.shop/'
+        rules_file_name: '.zap/rules.tsv'
+        cmd_options: '-a'

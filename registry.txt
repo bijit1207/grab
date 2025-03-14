@@ -1,0 +1,42 @@
+Prisma Cloud ships a command-line configuration and control tool known as twistcli. It is supported on Linux, macOS, and Windows.
+
+Twistcli Scans container images for vulnerabilities and compliance issues. Because it runs from the command line, it can easily be integrated with Prisma Cloud’s scanning capabilities into CI/CD pipeline.
+
+Prisma Cloud twistcli command-line tool can be used to scan container images and serverless functions. Scanning with twistcli is supported on Linux, macOS, and Windows.
+
+
+
+Pre-requisites for CI/CD Pipeline for scanning base images:- 
+
+1. Install docker and make sure it is up and running.
+2. Install Twistcli
+3. Obtain --address URL,  --user Access Key ID, --password Secret Key to authenticate with Prisma Cloud.
+
+
+Scanning of base images:
+
+1. Scan the base image for vulnerabilities with the help of Twistcli through CI/CD pipeline.
+2. If the image has Critical/High/Medium vulnerabilities, fail the build of the application to which the base image has been utilzied with.
+3. The criteria for passing or failing a scan is determined by the CI vulnerability and compliance policies set in Console. Make sure to set the policy as Critical,High to fail the build.
+4. Once vulnerabilities are identified within the base image, export the report from Monitor > Vulnerabilities > Images > CI or Monitor > Compliance > Images > CI and pass it to the relevant stakeholder to fix the issues within given SLA. 
+5. For the vulnerabilities that cannot be remediated or mitigated, should be risk assessed by the VM team or get approval from the Security team before moving the base image for deployment.
+6. Collections and Tags should be created for each naming convention.
+
+
+Pre-requisites for CI/CD Pipeline for scanning Registries:- 
+
+1. Install docker and make sure it is up and running.
+2. Install Twistcli
+3. Obtain --address URL,  --user Access Key ID, --password Secret Key to authenticate with Prisma Cloud.
+4. Export Acces and Secret Keys for the Account.
+5. Obtain Registry username and password for loggin in to the registry through AWS CLI
+
+
+Scanning of Registries:
+
+1. Scan the registry image for vulnerabilities with the help of Twistcli through CI/CD pipeline.
+2. If the image has Critical/High/Medium vulnerabilities, fail the build of the application.
+3. The criteria for passing or failing a scan is determined by the CI vulnerability and compliance policies set in Console. Make sure to set the policy as Critical,High to fail the build.
+4. Once vulnerabilities are identified within the base image, export the report from Monitor > Vulnerabilities > Images > CI or Monitor > Compliance > Images > CI and pass it to the relevant stakeholder to fix the issues within given SLA. 
+5. For the vulnerabilities that cannot be remediated or mitigated, should be risk assessed by the VM team or get approval from the Security team before moving the base image for deployment.
+6. Collections and Tags should be created for each  Registry naming convention.
