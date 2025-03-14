@@ -11,7 +11,7 @@ jobs:
   checkov:
     name: Run Checkov
     runs-on: ubuntu-latest
-#add
+
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
@@ -54,25 +54,25 @@ jobs:
 
 
 
-name: tfsec workflow
-on:
-  push:
-    branches:
-      - main
+# name: tfsec workflow
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  checkov:
-    name: Run tfsec
-    runs-on: ubuntu-latest
+# jobs:
+#   checkov:
+#     name: Run tfsec
+#     runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout repo
-      uses: actions/checkout@v2
+#     steps:
+#     - name: Checkout repo
+#       uses: actions/checkout@v2
      
-    - name: Install Python and tfsec
-      run: |
-        curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+#     - name: Install Python and tfsec
+#       run: |
+#         curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
 
-    - name: Run tfsec
-      run: |
-        tfsec . -s
+#     - name: Run tfsec
+#       run: |
+#         tfsec . -s
