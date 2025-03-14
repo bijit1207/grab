@@ -13,32 +13,47 @@ env:
 
 jobs:
   snyk-sast:
+   
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    # - uses: snyk/actions/setup@master
-    - uses:  snyk/actions/golang@master
-      # with:
-      #   go-version: "1.13"
-    
-    # creating a directory to store snyk SAST results    
-    - name: create a directory to store snyk sast results
-      run: |        
-        mkdir $SNYK_RESULT_PATH      
-    
-    # running snyk code test command to identify vulnerabilties in code test
-    - name: Snyk test
-      run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/maven@master
+        continue-on-error: true # To make sure that SARIF upload gets called
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --sarif-file-output=snyk.sarif
+      - name: Upload result to GitHub Code Scanning
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: snyk.sarif
 
-     # storing snyk sast result as an artifacts 
-    - name: snyk-sast-results  
-      uses: actions/upload-artifact@v4
-      with:
-        name: snyk-sast-results
-        path: ${{ env.SNYK_RESULT_PATH }}
-        retention-days: 30       
+    # steps:
+    # - uses: actions/checkout@master
+    # # - uses: snyk/actions/setup@master
+    # - uses:  snyk/actions/golang@master
+    #   # with:
+    #   #   go-version: "1.13"
+    
+    # # creating a directory to store snyk SAST results    
+    # - name: create a directory to store snyk sast results
+    #   run: |        
+    #     mkdir $SNYK_RESULT_PATH      
+    
+    # # running snyk code test command to identify vulnerabilties in code test
+    # - name: Snyk test
+    #   run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
+    #   env:
+    #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+    #  # storing snyk sast result as an artifacts 
+    # - name: snyk-sast-results  
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: snyk-sast-results
+    #     path: ${{ env.SNYK_RESULT_PATH }}
+    #     retention-days: 30       
   
   zap_scan_dast:
     runs-on: ubuntu-latest
