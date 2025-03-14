@@ -34,7 +34,7 @@ jobs:
 
      # storing snyk sast result as an artifacts 
     - name: snyk-sast-results  
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: snyk-sast-results
         path: ${{ env.SNYK_RESULT_PATH }}
