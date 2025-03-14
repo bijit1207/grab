@@ -45,14 +45,14 @@ jobs:
     # - name: Snyk test
     #   run: snyk code test --json-file-output=$SNYK_RESULT_PATH/snyk.json || true
     #   env:
-    #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+    #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }
 
     #  # storing snyk sast result as an artifacts 
     # - name: snyk-sast-results  
     #   uses: actions/upload-artifact@v4
     #   with:
     #     name: snyk-sast-results
-    #     path: ${{ env.SNYK_RESULT_PATH }}
+    #     path: ${{ env.SNYK_RESULT_PATH }
     #     retention-days: 30       
   
   zap_scan_dast:
